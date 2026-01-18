@@ -33,8 +33,13 @@ while :; do
     echo "--------------------"
     echo "0-9=select, n=next, p=prev, Enter=quit"
 
-    read -rsn1 choice
-    echo
+    case "$(basename -- "$0")" in
+      zsh)  IFS= read -sk1 choice;;
+      bash) IFS= read -r -n1 -s choice;;
+      ksh)  IFS= read -r -k1 choice || IFS= read -r -n1 -s choice;;
+      *)    IFS= read -r -n1 choice || IFS= read -r choice;;
+    esac
+    echo $choice
 
     case "$choice" in
       "")
