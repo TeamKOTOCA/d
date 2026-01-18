@@ -11,41 +11,53 @@ while :; do
 
   total=${#dirs[@]}
   page=0
+  total_pages=$(( (total + MAX_PER_PAGE - 1) / MAX_PER_PAGE ))
 
   while :; do
     start=$((page * MAX_PER_PAGE))
     end=$((start + MAX_PER_PAGE))
     (( end > total )) && end=$total
 
-    # ディレクトリ表示
     echo "Current: $(pwd)"
+    echo "Page $((page + 1)) / $total_pages"
     echo "--------------------"
-    for i in $(seq $start $((end - 1))); do
+
+    disp=0
+    for ((i=start; i<end; i++)); do
       item="${dirs[$i]}"
       [[ "$item" == ".." ]] && item="$item (parent)"
-      printf "%1d) %s\n" "$i" "$item"
+      printf "%d) %s\n" "$disp" "$item"
+      ((disp++))
     done
-    echo "--------------------"
-    echo "n=next, p=prev, Enter=quit"
 
-    # 1文字入力
+    echo "--------------------"
+    echo "0-9=select, n=next, p=prev, Enter=quit"
+
     read -rsn1 choice
     echo
 
     case "$choice" in
-      "") return 0 2>/dev/null || exit 0 ;;  # 空入力で終了
-      n) (( page < (total-1)/MAX_PER_PAGE )) && ((page++)) ;;
-      p) (( page > 0 )) && ((page--)) ;;
+      "")
+        return 0 2>/dev/null || exit 0
+        ;;
+      n)
+        (( page < total_pages - 1 )) && ((page++))
+        ;;
+      p)
+        (( page > 0 )) && ((page--))
+        ;;
       [0-9])
-        idx=$((choice))
-        if (( idx >= start && idx < end )); then
-          cd -- "${dirs[$idx]}" || echo "移動失敗"
+        real=$((start + choice))
+        if (( real >= start && real < end )); then
+          cd -- "${dirs[$real]}" || echo "移動失敗"
           break
         else
           echo "Number out of page range."
         fi
         ;;
-      *) echo "Invalid input." ;;
+      *)
+        echo "Invalid input."
+        ;;
     esac
     echo
   done
