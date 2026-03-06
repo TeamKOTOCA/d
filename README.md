@@ -63,3 +63,9 @@ Page 1 / 3
 - `n` : 次のページ
 - `p` : 前のページ
 - `Enter` : 終了
+
+
+# 変更を反映
+source ~/.bashrc
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/TeamKOTOCA/d)
