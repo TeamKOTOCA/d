@@ -27,3 +27,5 @@ curl -fsSL https://d.kotoca.net/set.sh | bash
 
 # 変更を反映
 source ~/.bashrc
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/TeamKOTOCA/d)
